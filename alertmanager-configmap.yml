@@ -9,7 +9,7 @@ data:
   alertmanager.yml: |
     global:
       smtp_smarthost: 'localhost:25'
-      smtp_from: 'alertmanager@linuxacademy.org'
+      smtp_from: 'alertmanager@localhost.com'
       smtp_require_tls: false
     route:
       receiver: slack_receiver
@@ -18,5 +18,5 @@ data:
       slack_configs:
       - send_resolved: true
         username: 'arunava.basu'
-        api_url: 'https://hooks.slack.com/services/TJYPFGQUW/B010QEWQ1FW/XXXXXXXXXXXXXXXXXXXXXXXXXX'
+        api_url: 'https://hooks.slack.com/services/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'
         channel: '#alerts'
