@@ -14,6 +14,16 @@ A working Kubernetes cluster.
   Or, execute `install_node_exporter.sh` in each node 
 
 #### 2. Update the slack_receiver section inside `alertmanager-configmap.yml`
+  Open Slack and create private channel #alerts
+  Open https://api.slack.com/apps
+  Create new app -> From Scratch -> Name app & choose workspace -> Create App 
+  Incoming Webhooks -> Activate Incoming Webhooks -> On 
+  Incoming Webhooks -> Add New Webhook to Workspace. Select the channel name #alerts and click Allow
+  Copy the webhook url and use it going forward as the value of `api_url` in the `slack_receiver` section
+
+  You can do a curl to check the channel.
+  curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' $WEBHOOK_URL
+
 ```
 	receivers:
 	- name: slack_receiver
