@@ -1,0 +1,53 @@
+Setting Up Node exporters:
+
+# Repeat these steps on both your master and worker nodes.
+# Create the Prometheus user:
+[root@arunavabasu4c grafana]# adduser prometheus
+ 
+# Download Node Exporter:
+[root@arunavabasu4c prometheus]# cd /home/prometheus/
+[root@arunavabasu4c prometheus]# curl -LO "https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   628  100   628    0     0   1252      0 --:--:-- --:--:-- --:--:--  1253
+100 7893k  100 7893k    0     0  4916k      0  0:00:01  0:00:01 --:--:-- 14.3M
+[root@arunavabasu4c prometheus]#
+[root@arunavabasu4c prometheus]# tar -zxvf node_exporter-0.18.1.linux-amd64.tar.gz
+node_exporter-0.18.1.linux-amd64/
+node_exporter-0.18.1.linux-amd64/node_exporter
+node_exporter-0.18.1.linux-amd64/NOTICE
+node_exporter-0.18.1.linux-amd64/LICENSE
+[root@arunavabasu4c prometheus]#
+[root@arunavabasu4c prometheus]# mv node_exporter-0.18.1.linux-amd64 node_exporter
+[root@arunavabasu4c prometheus]#
+[root@arunavabasu4c prometheus]# cd node_exporter
+[root@arunavabasu4c node_exporter]#
+[root@arunavabasu4c node_exporter]# chown prometheus:prometheus node_exporter
+[root@arunavabasu4c node_exporter]#
+ 
+# Create the systemd file for node_exporter
+[root@arunavabasu4c node_exporter]# cat /etc/systemd/system/node_exporter.service
+[Unit]
+Description=Node Exporter
+ 
+[Service]
+User=prometheus
+ExecStart=/home/prometheus/node_exporter/node_exporter
+ 
+[Install]
+WantedBy=default.target
+[root@arunavabasu4c node_exporter]#
+ 
+# Reload systemd:
+[root@arunavabasu4c node_exporter]# systemctl daemon-reload
+[root@arunavabasu4c node_exporter]#
+ 
+# Enable and start the node_exporter service:
+[root@arunavabasu4c node_exporter]# systemctl enable --now node_exporter.service
+Created symlink from /etc/systemd/system/default.target.wants/node_exporter.service to /etc/systemd/system/node_exporter.service.
+[root@arunavabasu4c node_exporter]#
+ 
+# Check the node_exporter's listen port
+[root@arunavabasu4c node_exporter]# netstat -nltp | grep 9100
+tcp6       0      0 :::9100                 :::*                    LISTEN      18071/node_exporter
+[root@arunavabasu4c node_exporter]#
